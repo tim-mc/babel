@@ -9,6 +9,14 @@ class Foo {
 
   set foo(bar) {}
 
+  async #foo() {}
+
+  #foo() {}
+
+  get #foo() {}
+
+  set #foo(bar) {}
+
   static async foo() {}
 
   static foo() {}
