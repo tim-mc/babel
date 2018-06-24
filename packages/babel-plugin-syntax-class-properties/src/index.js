@@ -5,7 +5,11 @@ export default declare(api => {
 
   return {
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push("classProperties", "classPrivateProperties");
+      parserOpts.plugins.push(
+        "classProperties",
+        "classPrivateProperties",
+        "classPrivateMethods",
+      );
     },
   };
 });
