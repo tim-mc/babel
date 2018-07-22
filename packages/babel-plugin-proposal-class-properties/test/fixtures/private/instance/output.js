@@ -1,7 +1,10 @@
-var Foo = function Foo() {
+var Foo =
+/*#__PURE__*/
+function () {
   "use strict";
 
-  babelHelpers.classCallCheck(this, Foo);
+  function Foo(opts) {
+    babelHelpers.classCallCheck(this, Foo);
 
   _bar.set(this, {
     writable: true,
@@ -10,3 +13,5 @@ var Foo = function Foo() {
 };
 
 var _bar = new WeakMap();
+
+var _getOptions = new WeakMap();
