@@ -74,7 +74,9 @@ export default declare((api, options) => {
       const body = path.get("body.body");
 
       for (const prop of body) {
-        if (!prop.isClassPrivateProperty()) continue;
+        if (!prop.isClassPrivateProperty() && !prop.isClassPrivateMethod()) {
+          continue;
+        }
         if (prop.node.key.id.name !== name) continue;
 
         // This class redeclares the private name.
@@ -323,6 +325,51 @@ export default declare((api, options) => {
     ];
   }
 
+  function buildClassPrivateMethodSpec({ ref, path, initNodes, state }) {
+    const { parentPath, scope } = path;
+    const {
+      params,
+      body,
+      key: {
+        id: { name },
+      },
+    } = path.node;
+
+    const map = scope.generateUidIdentifier(name);
+    memberExpressionToFunctions(parentPath, privateNameVisitor, {
+      name,
+      map,
+      file: state,
+      ...privateNameHandlerSpec,
+    });
+
+    initNodes.push(
+      template.statement`var MAP = new WeakMap();`({
+        MAP: map,
+      }),
+    );
+
+    const methodName = t.identifier(name);
+    const methodValue = path.node
+      ? t.functionExpression(methodName, params, body)
+      : scope.buildUndefinedNode();
+    const methodDeclarationNode = t.variableDeclaration("var", [
+      t.variableDeclarator(methodName, methodValue),
+    ]);
+
+    // Must be late evaluated in case it references another private field.
+    return () => ({
+      methodDeclarationNode,
+      instanceAssignment: template.statement`MAP.set(REF, VALUE);`({
+        MAP: map,
+        REF: ref,
+        VALUE: methodName,
+      }),
+    });
+  }
+
+  function buildClassPrivateMethodLoose() {}
+
   const buildClassProperty = loose
     ? buildClassPropertyLoose
     : buildClassPropertySpec;
@@ -335,6 +382,10 @@ export default declare((api, options) => {
     ? buildClassStaticPrivatePropertyLoose
     : buildClassStaticPrivatePropertySpec;
 
+  const buildClassPrivateMethod = loose
+    ? buildClassPrivateMethodLoose
+    : buildClassPrivateMethodSpec;
+
   return {
     inherits: syntaxClassProperties,
 
@@ -345,6 +396,7 @@ export default declare((api, options) => {
         const props = [];
         const computedPaths = [];
         const privateNames = new Set();
+        const privateMethods = [];
         const body = path.get("body");
 
         for (const path of body.get("body")) {
@@ -358,7 +410,7 @@ export default declare((api, options) => {
             );
           }
 
-          if (path.isClassPrivateProperty()) {
+          if (path.isPrivate()) {
             const {
               key: {
                 id: { name },
@@ -373,6 +425,8 @@ export default declare((api, options) => {
 
           if (path.isProperty()) {
             props.push(path);
+          } else if (path.isClassPrivateMethod()) {
+            privateMethods.push(path);
           } else if (path.isClassMethod({ kind: "constructor" })) {
             constructor = path;
           }
@@ -385,7 +439,6 @@ export default declare((api, options) => {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
         } else {
-          // path.isClassDeclaration() && path.node.id
           ref = path.node.id;
         }
 
@@ -429,6 +482,20 @@ export default declare((api, options) => {
             );
           }
         }
+
+        for (const privateMethod of privateMethods) {
+          const inits = [];
+          privateMapInits.push(inits);
+          privateMaps.push(
+            buildClassPrivateMethod({
+              ref: t.thisExpression(),
+              path: privateMethod,
+              initNodes: inits,
+              state,
+            }),
+          );
+        }
+
         let p = 0;
         for (const prop of props) {
           if (prop.node.static) {
@@ -455,6 +522,16 @@ export default declare((api, options) => {
             );
           }
         }
+        privateMethods.forEach(() => {
+          const { methodDeclarationNode, instanceAssignment } = privateMaps[
+            p
+          ]();
+          instanceBody.push(methodDeclarationNode, instanceAssignment);
+          privateMapInits[p].forEach(map => {
+            staticNodes.push(map);
+          });
+          p++;
+        });
 
         if (instanceBody.length) {
           if (!constructor) {
@@ -482,8 +559,6 @@ export default declare((api, options) => {
             if (prop.node.static) continue;
             prop.traverse(referenceVisitor, state);
           }
-
-          //
 
           if (isDerived) {
             const bareSupers = [];
