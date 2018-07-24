@@ -349,12 +349,16 @@ export default declare((api, options) => {
       }),
     );
 
-    const methodName = t.identifier(name);
-    const methodValue = path.node
-      ? t.functionExpression(methodName, params, body)
+    const methodNameNode = t.identifier(name);
+    const methodValueNode = path.node
+      ? t.functionExpression(methodNameNode, params, body)
       : scope.buildUndefinedNode();
+    const boundMethodNode = t.callExpression(
+      t.memberExpression(methodValueNode, t.identifier("bind")),
+      [t.thisExpression()],
+    );
     const methodDeclarationNode = t.variableDeclaration("var", [
-      t.variableDeclarator(methodName, methodValue),
+      t.variableDeclarator(methodNameNode, boundMethodNode),
     ]);
 
     // Must be late evaluated in case it references another private field.
@@ -363,7 +367,7 @@ export default declare((api, options) => {
       instanceAssignment: template.statement`MAP.set(REF, VALUE);`({
         MAP: map,
         REF: ref,
-        VALUE: methodName,
+        VALUE: methodNameNode,
       }),
     });
   }
