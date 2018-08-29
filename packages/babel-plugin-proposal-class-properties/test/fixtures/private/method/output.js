@@ -6,11 +6,6 @@ function () {
   function Foo(status) {
     babelHelpers.classCallCheck(this, Foo);
 
-    _foo.set(this, {
-      writable: true,
-      value: "bar"
-    });
-
     var getStatus = function getStatus() {
       return this.status;
     };
@@ -51,7 +46,5 @@ function () {
   }]);
   return Foo;
 }();
-
-var _foo = new WeakMap();
 
 var _getStatus = new WeakMap();

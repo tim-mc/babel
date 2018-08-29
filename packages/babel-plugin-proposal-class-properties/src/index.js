@@ -442,7 +442,7 @@ export default declare((api, options) => {
           }
         }
 
-        if (!props.length) return;
+        if (!props.length && !privateMethods.length) return;
 
         let ref;
         if (path.isClassExpression() || !path.node.id) {
@@ -583,6 +583,9 @@ export default declare((api, options) => {
 
         for (const prop of props) {
           prop.remove();
+        }
+        for (const privateMethod of privateMethods) {
+          privateMethod.remove();
         }
 
         if (computedNodes.length === 0 && staticNodes.length === 0) return;
