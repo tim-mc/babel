@@ -186,6 +186,16 @@ export default declare((api, options) => {
           value,
         ],
       );
+
+  const privateMethodHandlerSpec = {
+    ...privateNameHandlerSpec,
+    get(member) {
+      const { map, file } = this;
+
+      return t.callExpression(file.addHelper("classPrivateMethodGet"), [
+        this.receiver(member),
+        t.cloneNode(map),
+      ]);
     },
   };
 
@@ -340,7 +350,7 @@ export default declare((api, options) => {
       name,
       map,
       file: state,
-      ...privateNameHandlerSpec,
+      ...privateMethodHandlerSpec,
     });
 
     initNodes.push(
@@ -353,12 +363,8 @@ export default declare((api, options) => {
     const methodValueNode = path.node
       ? t.functionExpression(methodNameNode, params, body)
       : scope.buildUndefinedNode();
-    const boundMethodNode = t.callExpression(
-      t.memberExpression(methodValueNode, t.identifier("bind")),
-      [t.thisExpression()],
-    );
     const methodDeclarationNode = t.variableDeclaration("var", [
-      t.variableDeclarator(methodNameNode, boundMethodNode),
+      t.variableDeclarator(methodNameNode, methodValueNode),
     ]);
 
     // Must be late evaluated in case it references another private field.

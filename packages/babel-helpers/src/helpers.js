@@ -1739,3 +1739,12 @@ helpers.decorate = helper("7.1.5")`
     return constructor;
   }
 `;
+
+helpers.classPrivateMethodGet = helper("7.0.0-beta.0")`
+  export default function _classPrivateMethodGet(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+      throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+  }
+`;
