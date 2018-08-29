@@ -1,30 +1,33 @@
 class Foo {
-  #status = 'pre-init'
+  #foo = "bar"
 
   constructor(status) {
-    this.#status = status
+      this.status = status;
   }
 
   #getStatus() {
-    return this.#status;
+      return this.status;
   }
 
   getCurrentStatus() {
-    return this.#getStatus();
+      return this.#getStatus();
+  }
+
+  setCurrentStatus(newStatus) {
+      this.status = newStatus;
   }
 
   getFakeStatus(fakeStatus) {
-    this.#getStatus();
-    const getStatus = this.#getStatus;
-    (function () {
-      getStatus.call({ status: fakeStatus });
-    })();
+      const getStatus = this.#getStatus;
+      return function() {
+          return getStatus.call({ status: fakeStatus });
+      };
   }
 
   getFakeStatusFunc() {
-    return {
-      status: 'fake-status',
-      getFakeStatus: this.#getStatus,
-    }
+      return {
+          status: 'fake-status',
+          getFakeStatus: this.#getStatus,
+      };
   }
 }
