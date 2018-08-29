@@ -1,6 +1,4 @@
 class Foo {
-  #foo = "bar"
-
   constructor(status) {
       this.status = status;
   }
