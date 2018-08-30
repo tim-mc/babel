@@ -1,6 +1,7 @@
 class Foo {
   constructor(status) {
       this.status = status;
+      expect(() => this.#getStatus = null).toThrow(TypeError);
   }
 
   #getStatus() {
