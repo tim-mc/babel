@@ -1,6 +1,8 @@
 class Foo {
   #foo = 0;
-  publicField = this.#privateMethod();
+  constructor() {
+    this.publicField = this.#privateMethod();
+  }
 
   test(other) {
     this.#foo += 1;
@@ -13,3 +15,5 @@ class Foo {
     return 42;
   }
 }
+
+expect((new Foo).publicField).toEqual(42);
