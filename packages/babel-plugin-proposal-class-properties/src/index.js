@@ -186,6 +186,8 @@ export default declare((api, options) => {
           value,
         ],
       );
+    },
+  };
 
   const privateMethodHandlerSpec = {
     ...privateNameHandlerSpec,
