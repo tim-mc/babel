@@ -9,6 +9,10 @@ class Foo {
   #foo() {}
   get #foo() {}
   set #foo(bar) {}
+  * #foo() {}
+  async * #foo() {}
+  get #bar() {}
+  set #baz(taz) {}
 
   static async foo() {}
   static foo() {}

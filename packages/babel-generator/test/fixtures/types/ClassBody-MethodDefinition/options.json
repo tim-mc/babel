@@ -1,1 +1,1 @@
-{ "plugins": ["classPrivateMethods"] }
+{ "plugins": ["classPrivateMethods", "asyncGenerators"] }
