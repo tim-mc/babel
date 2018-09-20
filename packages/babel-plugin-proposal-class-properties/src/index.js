@@ -199,6 +199,11 @@ export default declare((api, options) => {
         t.cloneNode(map),
       ]);
     },
+    set() {
+      const { file } = this;
+
+      return t.callExpression(file.addHelper("classPrivateMethodSet"));
+    },
   };
 
   function buildClassPropertySpec(ref, path, state) {
@@ -347,17 +352,17 @@ export default declare((api, options) => {
       },
     } = path.node;
 
-    const map = scope.generateUidIdentifier(name);
+    const methodSet = scope.generateUidIdentifier(name);
     memberExpressionToFunctions(parentPath, privateNameVisitor, {
       name,
-      map,
+      map: methodSet,
       file: state,
       ...privateMethodHandlerSpec,
     });
 
     initNodes.push(
-      template.statement`var MAP = new WeakMap();`({
-        MAP: map,
+      template.statement`var SET = new WeakSet();`({
+        SET: methodSet,
       }),
     );
 
@@ -372,10 +377,9 @@ export default declare((api, options) => {
     // Must be late evaluated in case it references another private field.
     return () => ({
       methodDeclarationNode,
-      instanceAssignment: template.statement`MAP.set(REF, VALUE);`({
-        MAP: map,
+      instanceAssignment: template.statement`SET.add(REF);`({
+        SET: methodSet,
         REF: ref,
-        VALUE: methodNameNode,
       }),
     });
   }
@@ -538,7 +542,8 @@ export default declare((api, options) => {
           const { methodDeclarationNode, instanceAssignment } = privateMaps[
             p
           ]();
-          instanceBody.push(methodDeclarationNode, instanceAssignment);
+          instanceBody.push(instanceAssignment);
+          path.insertBefore(methodDeclarationNode);
           privateMapInits[p].forEach(map => {
             staticNodes.push(map);
           });

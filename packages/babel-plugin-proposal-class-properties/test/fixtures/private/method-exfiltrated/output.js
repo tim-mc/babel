@@ -1,17 +1,17 @@
 var exfiltrated;
 
+var privateMethod = function privateMethod() {};
+
 var Foo = function Foo() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Foo);
 
-  var privateMethod = function privateMethod() {};
-
-  _privateMethod.set(this, privateMethod);
+  _privateMethod.add(this);
 
   if (exfiltrated === undefined) {
     exfiltrated = babelHelpers.classPrivateMethodGet(this, _privateMethod);
   }
 };
 
-var _privateMethod = new WeakMap();
+var _privateMethod = new WeakSet();
