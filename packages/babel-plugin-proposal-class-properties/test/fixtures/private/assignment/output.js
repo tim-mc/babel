@@ -1,3 +1,7 @@
+var privateMethod = function privateMethod() {
+  return 42;
+};
+
 var Foo =
 /*#__PURE__*/
 function () {
@@ -13,11 +17,7 @@ function () {
 
     babelHelpers.defineProperty(this, "publicField", babelHelpers.classPrivateMethodGet(this, _privateMethod).call(this));
 
-    var privateMethod = function privateMethod() {
-      return 42;
-    };
-
-    _privateMethod.set(this, privateMethod);
+    _privateMethod.add(this);
   }
 
   babelHelpers.createClass(Foo, [{
@@ -36,4 +36,4 @@ function () {
 
 var _foo = new WeakMap();
 
-var _privateMethod = new WeakMap();
+var _privateMethod = new WeakSet();

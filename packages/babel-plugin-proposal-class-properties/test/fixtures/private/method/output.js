@@ -1,3 +1,7 @@
+var getStatus = function getStatus() {
+  return this.status;
+};
+
 var Foo =
 /*#__PURE__*/
 function () {
@@ -6,11 +10,7 @@ function () {
   function Foo(status) {
     babelHelpers.classCallCheck(this, Foo);
 
-    var getStatus = function getStatus() {
-      return this.status;
-    };
-
-    _getStatus.set(this, getStatus);
+    _getStatus.add(this);
 
     this.status = status;
   }
@@ -47,4 +47,4 @@ function () {
   return Foo;
 }();
 
-var _getStatus = new WeakMap();
+var _getStatus = new WeakSet();
