@@ -10,7 +10,7 @@ var Foo = function Foo() {
   _privateMethod.add(this);
 
   if (exfiltrated === undefined) {
-    exfiltrated = babelHelpers.classPrivateMethodGet(this, _privateMethod);
+    exfiltrated = babelHelpers.classPrivateMethodGet(this, _privateMethod, privateMethod);
   }
 };
 
