@@ -15,7 +15,7 @@ function () {
       value: 0
     });
 
-    babelHelpers.defineProperty(this, "publicField", babelHelpers.classPrivateMethodGet(this, _privateMethod).call(this));
+    babelHelpers.defineProperty(this, "publicField", babelHelpers.classPrivateMethodGet(this, _privateMethod, privateMethod).call(this));
 
     _privateMethod.add(this);
   }

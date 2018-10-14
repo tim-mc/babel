@@ -18,7 +18,7 @@ function () {
   babelHelpers.createClass(Foo, [{
     key: "getCurrentStatus",
     value: function getCurrentStatus() {
-      return babelHelpers.classPrivateMethodGet(this, _getStatus).call(this);
+      return babelHelpers.classPrivateMethodGet(this, _getStatus, getStatus).call(this);
     }
   }, {
     key: "setCurrentStatus",
@@ -28,9 +28,9 @@ function () {
   }, {
     key: "getFakeStatus",
     value: function getFakeStatus(fakeStatus) {
-      var getStatus = babelHelpers.classPrivateMethodGet(this, _getStatus);
+      var fakeGetStatus = babelHelpers.classPrivateMethodGet(this, _getStatus, getStatus);
       return function () {
-        return getStatus.call({
+        return fakeGetStatus.call({
           status: fakeStatus
         });
       };
@@ -40,7 +40,7 @@ function () {
     value: function getFakeStatusFunc() {
       return {
         status: 'fake-status',
-        getFakeStatus: babelHelpers.classPrivateMethodGet(this, _getStatus)
+        getFakeStatus: babelHelpers.classPrivateMethodGet(this, _getStatus, getStatus)
       };
     }
   }]);

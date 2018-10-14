@@ -197,12 +197,13 @@ export default declare((api, options) => {
       return t.callExpression(file.addHelper("classPrivateMethodGet"), [
         this.receiver(member),
         t.cloneNode(map),
+        t.identifier(this.name),
       ]);
     },
     set() {
       const { file } = this;
 
-      return t.callExpression(file.addHelper("classPrivateMethodSet"));
+      return t.callExpression(file.addHelper("classPrivateMethodSet"), []);
     },
   };
 

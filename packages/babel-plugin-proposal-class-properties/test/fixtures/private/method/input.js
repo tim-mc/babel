@@ -16,16 +16,16 @@ class Foo {
   }
 
   getFakeStatus(fakeStatus) {
-    const getStatus = this.#getStatus;
+    const fakeGetStatus = this.#getStatus;
     return function() {
-        return getStatus.call({ status: fakeStatus });
+      return fakeGetStatus.call({ status: fakeStatus });
     };
   }
 
   getFakeStatusFunc() {
     return {
-        status: 'fake-status',
-        getFakeStatus: this.#getStatus,
+      status: 'fake-status',
+      getFakeStatus: this.#getStatus,
     };
   }
 }

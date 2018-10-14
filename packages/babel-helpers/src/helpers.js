@@ -1741,11 +1741,11 @@ helpers.decorate = helper("7.1.5")`
 `;
 
 helpers.classPrivateMethodGet = helper("7.0.0-beta.0")`
-  export default function _classPrivateMethodGet(receiver, privateSet) {
+  export default function _classPrivateMethodGet(receiver, privateSet, fn) {
     if (!privateSet.has(receiver)) {
       throw new TypeError("attempted to get private field on non-instance");
     }
-    return privateSet.get(receiver);
+    return fn;
   }
 `;
 
