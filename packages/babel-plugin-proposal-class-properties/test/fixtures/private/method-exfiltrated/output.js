@@ -1,6 +1,6 @@
 var exfiltrated;
 
-var privateMethod = function privateMethod() {};
+var _privateMethod2 = function _privateMethod2() {};
 
 var Foo = function Foo() {
   "use strict";
@@ -10,7 +10,7 @@ var Foo = function Foo() {
   _privateMethod.add(this);
 
   if (exfiltrated === undefined) {
-    exfiltrated = babelHelpers.classPrivateMethodGet(this, _privateMethod, privateMethod);
+    exfiltrated = babelHelpers.classPrivateMethodGet(this, _privateMethod, _privateMethod2);
   }
 };
 

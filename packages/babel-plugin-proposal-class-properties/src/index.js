@@ -192,12 +192,12 @@ export default declare((api, options) => {
   const privateMethodHandlerSpec = {
     ...privateNameHandlerSpec,
     get(member) {
-      const { map, file } = this;
+      const { map, file, methodName } = this;
 
       return t.callExpression(file.addHelper("classPrivateMethodGet"), [
         this.receiver(member),
         t.cloneNode(map),
-        t.identifier(this.name),
+        t.identifier(methodName),
       ]);
     },
     set() {
@@ -354,10 +354,12 @@ export default declare((api, options) => {
     } = path.node;
 
     const methodSet = scope.generateUidIdentifier(name);
+    const methodNameNode = scope.generateUidIdentifier(name);
     memberExpressionToFunctions(parentPath, privateNameVisitor, {
       name,
       map: methodSet,
       file: state,
+      methodName: methodNameNode.name,
       ...privateMethodHandlerSpec,
     });
 
@@ -367,7 +369,6 @@ export default declare((api, options) => {
       }),
     );
 
-    const methodNameNode = t.identifier(name);
     const methodValueNode = path.node
       ? t.functionExpression(methodNameNode, params, body)
       : scope.buildUndefinedNode();
