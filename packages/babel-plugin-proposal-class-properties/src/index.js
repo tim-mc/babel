@@ -192,12 +192,12 @@ export default declare((api, options) => {
   const privateMethodHandlerSpec = {
     ...privateNameHandlerSpec,
     get(member) {
-      const { map, file, methodName } = this;
+      const { map, file, identifier } = this;
 
       return t.callExpression(file.addHelper("classPrivateMethodGet"), [
         this.receiver(member),
         t.cloneNode(map),
-        t.identifier(methodName),
+        t.cloneNode(identifier),
       ]);
     },
     set() {
@@ -359,7 +359,7 @@ export default declare((api, options) => {
       name,
       map: methodSet,
       file: state,
-      methodName: methodNameNode.name,
+      identifier: methodNameNode,
       ...privateMethodHandlerSpec,
     });
 
