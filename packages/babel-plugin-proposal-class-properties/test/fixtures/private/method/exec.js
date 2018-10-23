@@ -17,9 +17,9 @@ class Foo {
   }
 
   getFakeStatus(fakeStatus) {
-    const fakeGetStatus = this.#getStatus;
+    const getStatus = this.#getStatus;
     return function () {
-      return fakeGetStatus.call({ status: fakeStatus });
+      return getStatus.call({ status: fakeStatus });
     };
   }
 

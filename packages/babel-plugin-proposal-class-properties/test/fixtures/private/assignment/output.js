@@ -1,4 +1,4 @@
-var privateMethod = function privateMethod() {
+var _privateMethod2 = function _privateMethod2() {
   return 42;
 };
 
@@ -15,7 +15,7 @@ function () {
       value: 0
     });
 
-    babelHelpers.defineProperty(this, "publicField", babelHelpers.classPrivateMethodGet(this, _privateMethod, privateMethod).call(this));
+    babelHelpers.defineProperty(this, "publicField", babelHelpers.classPrivateMethodGet(this, _privateMethod, _privateMethod2).call(this));
 
     _privateMethod.add(this);
   }
