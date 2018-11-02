@@ -41,12 +41,12 @@ export function isLoose(file, feature) {
 export function verifyUsedFeatures(path, file) {
   if (hasFeature(file, FEATURES.decorators)) {
     throw new Error(
-      "@babel/plugin-class-features doesn't suport decorators yet.",
+      "@babel/plugin-class-features doesn't support decorators yet.",
     );
   }
   if (hasFeature(file, FEATURES.privateMethods)) {
     throw new Error(
-      "@babel/plugin-class-features doesn't suport private methods yet.",
+      "@babel/plugin-class-features doesn't support private methods yet.",
     );
   }
 
