@@ -16,7 +16,16 @@ import {
   isLoose,
 } from "./features";
 
+import pkg from "../package.json";
+
 export { enableFeature, FEATURES, setLoose };
+
+// Note: Versions are represented as an integer. e.g. 7.1.5 is represented
+//       as 70000100005. This method is easier than using a semver-parsing
+//       package, but it breaks if we relese x.y.z where x, y or z are
+//       greater than 99_999.
+const version = pkg.version.split(".").reduce((v, x) => v * 1e5 + +x, 0);
+const versionKey = "@babel/plugin-class-features/version";
 
 const getFeatureOptions = (options, name) => {
   const value = options[name];
@@ -56,6 +65,10 @@ export default declare((api, options) => {
     },
 
     pre() {
+      if (!this.file.get(versionKey) || this.file.get(versionKey) < version) {
+        this.file.set(versionKey, version);
+      }
+
       if (fields.enabled) {
         enableFeature(this.file, FEATURES.fields, fields.loose);
       }
@@ -71,6 +84,8 @@ export default declare((api, options) => {
 
     visitor: {
       Class(path, state) {
+        if (this.file.get(versionKey) !== version) return;
+
         verifyUsedFeatures(path, this.file);
 
         // Only fields are currently supported, this needs to be moved somewhere
