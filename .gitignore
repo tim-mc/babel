@@ -50,4 +50,5 @@ packages/babel-preset-env-standalone/babel-preset-env.min.js
 /codemods/*/node_modules
 /packages/babel-parser/build
 .idea/
+.vscode
 /.changelog
