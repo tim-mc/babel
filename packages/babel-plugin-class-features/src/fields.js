@@ -8,13 +8,21 @@ export function buildPrivateNamesMap(props) {
   for (const prop of props) {
     if (prop.isPrivate()) {
       const { name } = prop.node.key.id;
+      let propId = name;
+      if (prop.node.kind === "get") {
+        propId = `get_${name}`;
+      } else if (prop.node.kind === "set") {
+        propId = `set_${name}`;
+      }
       privateNamesMap.set(name, {
-        id: prop.scope.generateUidIdentifier(name),
+        id: prop.scope.generateUidIdentifier(propId),
         static: !!prop.node.static,
         method: prop.isClassPrivateMethod(),
         methodId: prop.isClassPrivateMethod()
-          ? prop.scope.generateUidIdentifier(name)
+          ? prop.scope.generateUidIdentifier(propId)
           : undefined,
+        isGetter: prop.node.kind === "get",
+        isSetter: prop.node.kind === "set",
       });
     }
   }
@@ -121,6 +129,7 @@ const privateNameHandlerSpec = {
       static: isStatic,
       method: isMethod,
       methodId,
+      isGetter,
     } = privateNamesMap.get(name);
 
     if (isStatic && !isMethod) {
@@ -129,11 +138,13 @@ const privateNameHandlerSpec = {
         [this.receiver(member), t.cloneNode(classRef), t.cloneNode(id)],
       );
     } else if (isMethod) {
-      return t.callExpression(file.addHelper("classPrivateMethodGet"), [
-        this.receiver(member),
-        t.cloneNode(id),
-        t.cloneNode(methodId),
-      ]);
+      const methodCallExpression = t.callExpression(
+        file.addHelper("classPrivateMethodGet"),
+        [this.receiver(member), t.cloneNode(id), t.cloneNode(methodId)],
+      );
+      return isGetter
+        ? optimiseCall(methodCallExpression, this.receiver(member), [])
+        : methodCallExpression;
     } else {
       return t.callExpression(file.addHelper("classPrivateFieldGet"), [
         this.receiver(member),
@@ -145,9 +156,12 @@ const privateNameHandlerSpec = {
   set(member, value) {
     const { classRef, privateNamesMap, file } = this;
     const { name } = member.node.property.id;
-    const { id, static: isStatic, method: isMethod } = privateNamesMap.get(
-      name,
-    );
+    const {
+      id,
+      static: isStatic,
+      method: isMethod,
+      isSetter,
+    } = privateNamesMap.get(name);
 
     if (isStatic && !isMethod) {
       return t.callExpression(
@@ -155,7 +169,13 @@ const privateNameHandlerSpec = {
         [this.receiver(member), t.cloneNode(classRef), t.cloneNode(id), value],
       );
     } else if (isMethod) {
-      return t.callExpression(file.addHelper("classPrivateMethodSet"), []);
+      const methodCallExpression = t.callExpression(
+        file.addHelper("classPrivateMethodSet"),
+        [],
+      );
+      return isSetter
+        ? optimiseCall(this.get(member), this.receiver(member), [value])
+        : methodCallExpression;
     } else {
       return t.callExpression(file.addHelper("classPrivateFieldSet"), [
         this.receiver(member),
