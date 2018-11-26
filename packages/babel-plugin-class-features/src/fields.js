@@ -198,14 +198,51 @@ const privateNameHandlerLoose = {
     const { privateNamesMap, file } = this;
     const { object } = member.node;
     const { name } = member.node.property.id;
+    const { id, isGetter, isSetter } = privateNamesMap.get(name);
 
-    member.replaceWith(
-      template.expression`BASE(REF, PROP)[PROP]`({
-        BASE: file.addHelper("classPrivateFieldLooseBase"),
-        REF: object,
-        PROP: privateNamesMap.get(name).id,
-      }),
-    );
+    if (isGetter) {
+      member.replaceWith(
+        this.call(
+          template.expression`BASE(REF, PROP)[PROP]`({
+            BASE: file.addHelper("classPrivateFieldLooseBase"),
+            REF: object,
+            PROP: id,
+          }),
+        ),
+      );
+    } else if (isSetter) {
+      const { node, parent, parentPath } = member;
+
+      // MEMBER = VALUE   ->   _set(MEMBER, VALUE)
+      // MEMBER += VALUE   ->   _set(MEMBER, _get(MEMBER) + VALUE)
+      if (parentPath.isAssignmentExpression({ left: node })) {
+        const { right } = parent;
+        const value = right;
+
+        parentPath.replaceWith(
+          this.call(
+            template.expression`BASE(REF, PROP)[PROP]`({
+              BASE: file.addHelper("classPrivateFieldLooseBase"),
+              REF: object,
+              PROP: id,
+            }),
+            [value],
+          ),
+        );
+      }
+    } else {
+      member.replaceWith(
+        template.expression`BASE(REF, PROP)[PROP]`({
+          BASE: file.addHelper("classPrivateFieldLooseBase"),
+          REF: object,
+          PROP: id,
+        }),
+      );
+    }
+  },
+
+  call(member, args = []) {
+    return optimiseCall(member, t.thisExpression(), args);
   },
 };
 
