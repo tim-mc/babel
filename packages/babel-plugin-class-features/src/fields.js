@@ -56,6 +56,24 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
   return initNodes;
 }
 
+const validatePrivateSetter = setterPath => {
+  const { node, parent, parentPath } = setterPath;
+  if (
+    parentPath.isAssignmentExpression({ left: node }) &&
+    parent.operator !== "="
+  ) {
+    throw setterPath.buildCodeFrameError(
+      "Cannot use an assignment operator other than '=' with a setter",
+    );
+  }
+  if (parentPath.isUpdateExpression({ argument: node })) {
+    throw setterPath.buildCodeFrameError(
+      "Cannot use a setter within an update expression",
+    );
+  }
+  return true;
+};
+
 // Traverses the class scope, handling private name references. If an inner
 // class redeclares the same private name, it will hand off traversal to the
 // restricted visitor (which doesn't traverse the inner class's inner scope).
@@ -169,6 +187,8 @@ const privateNameHandlerSpec = {
         [this.receiver(member), t.cloneNode(classRef), t.cloneNode(id), value],
       );
     } else if (isMethod) {
+      if (isSetter) validatePrivateSetter(member);
+
       const methodCallExpression = t.callExpression(
         file.addHelper("classPrivateMethodSet"),
         [],
@@ -211,10 +231,10 @@ const privateNameHandlerLoose = {
         ),
       );
     } else if (isSetter) {
+      validatePrivateSetter(member);
       const { node, parent, parentPath } = member;
 
       // MEMBER = VALUE   ->   _set(MEMBER, VALUE)
-      // MEMBER += VALUE   ->   _set(MEMBER, _get(MEMBER) + VALUE)
       if (parentPath.isAssignmentExpression({ left: node })) {
         const { right } = parent;
         const value = right;
