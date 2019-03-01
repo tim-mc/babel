@@ -1,27 +1,15 @@
-var Child =
-/*#__PURE__*/
-function (_Parent) {
-  "use strict";
+class Child extends Parent {
+  constructor() {
+    super();
 
-  babelHelpers.inherits(Child, _Parent);
-
-  function Child() {
-    var _this;
-
-    babelHelpers.classCallCheck(this, Child);
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Child).call(this));
-
-    _scopedFunctionWithThis.set(babelHelpers.assertThisInitialized(_this), {
+    _scopedFunctionWithThis.set(this, {
       writable: true,
       value: () => {
-        _this.name = {};
+        this.name = {};
       }
     });
-
-    return _this;
   }
 
-  return Child;
-}(Parent);
+}
 
 var _scopedFunctionWithThis = new WeakMap();

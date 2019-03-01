@@ -1,25 +1,13 @@
-var Outer = function Outer() {
-  "use strict";
+class Outer {
+  constructor() {
+    _outer.set(this, {
+      writable: true,
+      value: void 0
+    });
 
-  babelHelpers.classCallCheck(this, Outer);
+    class Test extends babelHelpers.classPrivateFieldGet(this, _outer) {}
+  }
 
-  _outer.set(this, {
-    writable: true,
-    value: void 0
-  });
-
-  var Test =
-  /*#__PURE__*/
-  function (_babelHelpers$classPr) {
-    babelHelpers.inherits(Test, _babelHelpers$classPr);
-
-    function Test() {
-      babelHelpers.classCallCheck(this, Test);
-      return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Test).apply(this, arguments));
-    }
-
-    return Test;
-  }(babelHelpers.classPrivateFieldGet(this, _outer));
-};
+}
 
 var _outer = new WeakMap();

@@ -7,7 +7,6 @@
       }
     ],
     ["proposal-class-properties", { "loose": true }],
-    "transform-classes",
     "transform-block-scoping",
     "syntax-class-properties"
   ]

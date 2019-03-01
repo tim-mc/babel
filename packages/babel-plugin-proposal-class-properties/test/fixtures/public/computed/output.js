@@ -20,13 +20,8 @@ var _ref3 = /regex/;
 var _baz = baz;
 var _ref4 = `template${expression}`;
 
-var MyClass =
-/*#__PURE__*/
-function () {
-  "use strict";
-
-  function MyClass() {
-    babelHelpers.classCallCheck(this, MyClass);
+class MyClass {
+  constructor() {
     babelHelpers.defineProperty(this, null, "null");
     babelHelpers.defineProperty(this, _undefined, "undefined");
     babelHelpers.defineProperty(this, void 0, "void 0");
@@ -38,25 +33,19 @@ function () {
     babelHelpers.defineProperty(this, _ref4, "template-with-expression");
   }
 
-  babelHelpers.createClass(MyClass, [{
-    key: _ref2,
-    value: function () {}
-  }, {
-    key: "whatever",
-    get: function () {},
-    set: function (value) {}
-  }, {
-    key: _computed,
-    get: function () {}
-  }, {
-    key: _computed2,
-    set: function (value) {}
-  }], [{
-    key: 10,
-    value: function () {}
-  }]);
-  return MyClass;
-}();
+  get ["whatever"]() {}
+
+  set ["whatever"](value) {}
+
+  get [_computed]() {}
+
+  set [_computed2](value) {}
+
+  [_ref2]() {}
+
+  static [10]() {}
+
+}
 
 babelHelpers.defineProperty(MyClass, _one, "test");
 babelHelpers.defineProperty(MyClass, 2 * 4 + 7, "247");

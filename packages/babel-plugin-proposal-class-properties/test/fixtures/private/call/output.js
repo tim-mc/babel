@@ -1,11 +1,5 @@
-var Foo =
-/*#__PURE__*/
-function () {
-  "use strict";
-
-  function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
-
+class Foo {
+  constructor() {
     _foo.set(this, {
       writable: true,
       value: function () {
@@ -14,16 +8,13 @@ function () {
     });
   }
 
-  babelHelpers.createClass(Foo, [{
-    key: "test",
-    value: function test(other) {
-      var _other$obj;
+  test(other) {
+    var _other$obj;
 
-      babelHelpers.classPrivateFieldGet(this, _foo).call(this);
-      babelHelpers.classPrivateFieldGet(_other$obj = other.obj, _foo).call(_other$obj);
-    }
-  }]);
-  return Foo;
-}();
+    babelHelpers.classPrivateFieldGet(this, _foo).call(this);
+    babelHelpers.classPrivateFieldGet(_other$obj = other.obj, _foo).call(_other$obj);
+  }
+
+}
 
 var _foo = new WeakMap();

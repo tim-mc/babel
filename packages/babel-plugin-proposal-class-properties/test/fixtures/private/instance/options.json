@@ -7,7 +7,6 @@
       }
     ],
     "proposal-class-properties",
-    "transform-classes",
     "transform-block-scoping",
     "syntax-class-properties",
     "transform-exponentiation-operator"

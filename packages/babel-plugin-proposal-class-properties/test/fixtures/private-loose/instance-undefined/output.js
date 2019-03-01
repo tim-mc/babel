@@ -1,11 +1,11 @@
-var Foo = function Foo() {
-  "use strict";
+class Foo {
+  constructor() {
+    Object.defineProperty(this, _bar, {
+      writable: true,
+      value: void 0
+    });
+  }
 
-  babelHelpers.classCallCheck(this, Foo);
-  Object.defineProperty(this, _bar, {
-    writable: true,
-    value: void 0
-  });
-};
+}
 
 var _bar = babelHelpers.classPrivateFieldLooseKey("bar");

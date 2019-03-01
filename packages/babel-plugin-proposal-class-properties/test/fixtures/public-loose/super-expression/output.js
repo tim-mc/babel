@@ -1,17 +1,8 @@
-var Foo =
-/*#__PURE__*/
-function (_Bar) {
-  "use strict";
+class Foo extends Bar {
+  constructor() {
+    var _temp;
 
-  babelHelpers.inherits(Foo, _Bar);
-
-  function Foo() {
-    var _temp, _this;
-
-    babelHelpers.classCallCheck(this, Foo);
-    foo((_temp = _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this)), _this.bar = "foo", _temp));
-    return _this;
+    foo((_temp = super(), this.bar = "foo", _temp));
   }
 
-  return Foo;
-}(Bar);
+}

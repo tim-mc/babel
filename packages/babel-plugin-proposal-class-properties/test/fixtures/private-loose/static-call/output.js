@@ -1,20 +1,9 @@
-var Foo =
-/*#__PURE__*/
-function () {
-  "use strict";
-
-  function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
+class Foo {
+  test(x) {
+    return babelHelpers.classPrivateFieldLooseBase(Foo, _foo)[_foo](x);
   }
 
-  babelHelpers.createClass(Foo, [{
-    key: "test",
-    value: function test(x) {
-      return babelHelpers.classPrivateFieldLooseBase(Foo, _foo)[_foo](x);
-    }
-  }]);
-  return Foo;
-}();
+}
 
 var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
 

@@ -1,12 +1,12 @@
 function test(x) {
   var _x = x;
 
-  var F = function F() {
-    "use strict";
+  class F {
+    constructor() {
+      babelHelpers.defineProperty(this, _x, 1);
+    }
 
-    babelHelpers.classCallCheck(this, F);
-    babelHelpers.defineProperty(this, _x, 1);
-  };
+  }
 
   x = 'deadbeef';
   expect(new F().foo).toBe(1);

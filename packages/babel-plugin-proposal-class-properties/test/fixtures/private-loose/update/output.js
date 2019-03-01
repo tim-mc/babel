@@ -1,26 +1,18 @@
-var Foo =
-/*#__PURE__*/
-function () {
-  "use strict";
-
-  function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
+class Foo {
+  constructor() {
     Object.defineProperty(this, _foo, {
       writable: true,
       value: 0
     });
   }
 
-  babelHelpers.createClass(Foo, [{
-    key: "test",
-    value: function test(other) {
-      babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]++;
-      ++babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
-      babelHelpers.classPrivateFieldLooseBase(other.obj, _foo)[_foo]++;
-      ++babelHelpers.classPrivateFieldLooseBase(other.obj, _foo)[_foo];
-    }
-  }]);
-  return Foo;
-}();
+  test(other) {
+    babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]++;
+    ++babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
+    babelHelpers.classPrivateFieldLooseBase(other.obj, _foo)[_foo]++;
+    ++babelHelpers.classPrivateFieldLooseBase(other.obj, _foo)[_foo];
+  }
+
+}
 
 var _foo = babelHelpers.classPrivateFieldLooseKey("foo");

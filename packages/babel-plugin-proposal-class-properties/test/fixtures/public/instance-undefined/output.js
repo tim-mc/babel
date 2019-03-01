@@ -1,6 +1,6 @@
-var Foo = function Foo() {
-  "use strict";
+class Foo {
+  constructor() {
+    babelHelpers.defineProperty(this, "bar", void 0);
+  }
 
-  babelHelpers.classCallCheck(this, Foo);
-  babelHelpers.defineProperty(this, "bar", void 0);
-};
+}

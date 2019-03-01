@@ -1,18 +1,17 @@
-var Foo = function Foo() {
-  "use strict";
+class Foo {
+  constructor() {
+    _x.set(this, {
+      writable: true,
+      value: 0
+    });
 
-  babelHelpers.classCallCheck(this, Foo);
+    _y.set(this, {
+      writable: true,
+      value: babelHelpers.classPrivateFieldGet(this, _x)
+    });
+  }
 
-  _x.set(this, {
-    writable: true,
-    value: 0
-  });
-
-  _y.set(this, {
-    writable: true,
-    value: babelHelpers.classPrivateFieldGet(this, _x)
-  });
-};
+}
 
 var _x = new WeakMap();
 

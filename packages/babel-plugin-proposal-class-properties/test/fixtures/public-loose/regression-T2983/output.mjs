@@ -1,13 +1,6 @@
 var _class, _temp;
 
-call((_temp = _class = function _class() {
-  babelHelpers.classCallCheck(this, _class);
-}, _class.test = true, _temp));
-
-var _default = function _default() {
-  babelHelpers.classCallCheck(this, _default);
-};
-
-_default.test = true;
-export { _default as default };
+call((_temp = _class = class {}, _class.test = true, _temp));
+export default class _class2 {}
+_class2.test = true;
 ;

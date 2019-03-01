@@ -1,11 +1,5 @@
-var Point =
-/*#__PURE__*/
-function () {
-  "use strict";
-
-  function Point(_x2 = 0, _y2 = 0) {
-    babelHelpers.classCallCheck(this, Point);
-
+class Point {
+  constructor(_x2 = 0, _y2 = 0) {
     _x.set(this, {
       writable: true,
       value: void 0
@@ -20,35 +14,31 @@ function () {
     babelHelpers.classPrivateFieldSet(this, _y, +_y2);
   }
 
-  babelHelpers.createClass(Point, [{
-    key: "equals",
-    value: function equals(p) {
-      return babelHelpers.classPrivateFieldGet(this, _x) === babelHelpers.classPrivateFieldGet(p, _x) && babelHelpers.classPrivateFieldGet(this, _y) === babelHelpers.classPrivateFieldGet(p, _y);
-    }
-  }, {
-    key: "toString",
-    value: function toString() {
-      return `Point<${babelHelpers.classPrivateFieldGet(this, _x)},${babelHelpers.classPrivateFieldGet(this, _y)}>`;
-    }
-  }, {
-    key: "x",
-    get: function () {
-      return babelHelpers.classPrivateFieldGet(this, _x);
-    },
-    set: function (value) {
-      babelHelpers.classPrivateFieldSet(this, _x, +value);
-    }
-  }, {
-    key: "y",
-    get: function () {
-      return babelHelpers.classPrivateFieldGet(this, _y);
-    },
-    set: function (value) {
-      babelHelpers.classPrivateFieldSet(this, _y, +value);
-    }
-  }]);
-  return Point;
-}();
+  get x() {
+    return babelHelpers.classPrivateFieldGet(this, _x);
+  }
+
+  set x(value) {
+    babelHelpers.classPrivateFieldSet(this, _x, +value);
+  }
+
+  get y() {
+    return babelHelpers.classPrivateFieldGet(this, _y);
+  }
+
+  set y(value) {
+    babelHelpers.classPrivateFieldSet(this, _y, +value);
+  }
+
+  equals(p) {
+    return babelHelpers.classPrivateFieldGet(this, _x) === babelHelpers.classPrivateFieldGet(p, _x) && babelHelpers.classPrivateFieldGet(this, _y) === babelHelpers.classPrivateFieldGet(p, _y);
+  }
+
+  toString() {
+    return `Point<${babelHelpers.classPrivateFieldGet(this, _x)},${babelHelpers.classPrivateFieldGet(this, _y)}>`;
+  }
+
+}
 
 var _x = new WeakMap();
 

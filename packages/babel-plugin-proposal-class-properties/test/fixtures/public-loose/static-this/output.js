@@ -1,8 +1,4 @@
-var A = function A() {
-  "use strict";
-
-  babelHelpers.classCallCheck(this, A);
-};
+class A {}
 
 A.self = A;
 

@@ -1,7 +1,7 @@
-var A = function A(_force) {
-  "use strict";
+class A {
+  constructor(_force) {
+    babelHelpers.defineProperty(this, "force", force);
+    babelHelpers.defineProperty(this, "foo", super.method());
+  }
 
-  babelHelpers.classCallCheck(this, A);
-  babelHelpers.defineProperty(this, "force", force);
-  babelHelpers.defineProperty(this, "foo", babelHelpers.get(babelHelpers.getPrototypeOf(A.prototype), "method", this).call(this));
-};
+}
